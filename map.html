@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Travel Map</title>
+
+    <!-- Leaflet.js CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #map { height: 500px; width: 80%; margin: auto; }
+    </style>
+</head>
+<body>
+<!-- 
+    <h2>My Travel Map</h2>
+    <p>Click on locations to see images from my travels!</p> -->
+
+    <div id="map"></div>
+
+    <!-- Leaflet.js Library -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([20, 0], 2);  // Centered globally
+
+        // Load OpenStreetMap tiles
+        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     attribution: '&copy; OpenStreetMap contributors'
+        // }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Travel locations with images
+        var locations = [
+    { 
+        name:"", 
+        lat: 45.5000, 
+        lng: 10.6170, 
+        image: "sirmione.jpg", 
+        caption: "Sirmione, Lake Garda, Italy" 
+    },
+    { 
+        name: "", 
+        lat: 28.2716, 
+        lng: -16.6422, 
+        image: "elteide.jpg", 
+        caption: "El Teide, Tenerife, Spain" 
+    },
+    { 
+        name: "", 
+        lat: 43.7167, 
+        lng: 10.4000, 
+        image: "leaningtowerpisa.jpg", 
+        caption: "Leaning Tower of Pisa, Italy" 
+    },
+    { 
+        name: "", 
+        lat: 50.0865, 
+        lng: 14.4114, 
+        image: "charlesbridge.jpg", 
+        caption: "Charles Bridge, Prague, Czech-Republic" 
+    },
+    { 
+        name: "", 
+        lat: 26.3141, 
+        lng: 93.1717, 
+        image: "hatichera.jpg", 
+        caption: "Hatichera Tea garden, Assam, India" 
+    },
+    { 
+        name: "", 
+        lat: 19.8276, 
+        lng: 85.7453, 
+        image: "niladribeach.jpg", 
+        caption: "Niladri Beach, Orissa, India" 
+    },
+    { 
+        name: "", 
+        lat: 45.4380, 
+        lng: 10.9916, 
+        image: "adigeriver.jpg", 
+        caption: "Adige River, Verona, Italy" 
+    },
+    { 
+        name: "", 
+        lat: 45.6250, 
+        lng: 13.8060, 
+        image: "sissa.jpg", 
+        caption: "View from SISSA Trieste, Italy" 
+    },
+    { 
+        name: "", 
+        lat: 45.4372, 
+        lng: 12.3326, 
+        image: "venicecanal.jpg", 
+        caption: "Grand Canal, Venice, Italy." 
+    },
+    { 
+        name: "", 
+        lat: 44.1075, 
+        lng: 9.8232, 
+        image: "laspezia.jpg", 
+        caption: "La Spezia, Italy" 
+    },
+    { 
+        name: "", 
+        lat: 48.2082, 
+        lng: 16.3705, 
+        image: "stephenscathedral.jpg", 
+        caption: "St. Stephen's Cathedral, Vienna, Austria" 
+    },
+    { 
+        name: "", 
+        lat: 47.2645, 
+        lng: 11.3973, 
+        image: "hofburgcastle.jpg", 
+        caption: "Hofburg, Innsbruck, Austria" 
+    },
+    { 
+        name: "", 
+        lat: 41.8902, 
+        lng: 12.4922, 
+        image: "colosseum.jpg", 
+        caption: "Colosseum, Rome, Italy" 
+    },
+    { 
+        name: "", 
+        lat: 53.2301, 
+        lng: -2.2984, 
+        image: "jodrellbank.jpg", 
+        caption: "Jodrell Bank Observatory, Manchester, UK" 
+    },
+    { 
+        name: "", 
+        lat: 41.4036, 
+        lng: 2.1744, 
+        image: "sagradafamilia.jpg", 
+        caption: "La Sagrada Familia, Barcelona, Spain" 
+    },
+    { 
+        name: "", 
+        lat: 28.4887, 
+        lng: -16.2676, 
+        image: "lasteresitas.jpg", 
+        caption: "Comet Tsuchinshan-ATLAS seen from Las Teresitas Beach in Tenerife" 
+    },
+    { 
+        name: "", 
+        lat: 18.9210, 
+        lng: 72.8335, 
+        image: "hoteltaj.jpg", 
+        caption: "Hotel Taj, Mumbai, India" 
+    },
+    { 
+        name: "", 
+        lat: 44.4949, 
+        lng: 11.3426, 
+        image: "bologna.jpg", 
+        caption: "The Towers of Bologna, Italy" 
+    },
+    { 
+        name: "", 
+        lat: 47.5636, 
+        lng: 13.6297, 
+        image: "hallstattlake.jpg", 
+        caption: "Hallstatt Lake, Austria" 
+    },
+    { 
+        name: "", 
+        lat: 43.7696, 
+        lng: 11.2558, 
+        image: "florence.jpg", 
+        caption: "Duomo di Santa Maria del Fiore, Florence, Italy" 
+    }
+];
+         // Custom Marker Icon (📍 emoji as a custom icon)
+         var customIcon = L.divIcon({
+            className: 'leaflet-div-icon',
+            html: '<div style="font-size: 24px; color: red;">📍</div>',
+            iconSize: [30, 30],  // Adjust size of the marker
+            iconAnchor: [15, 30]  // Adjust anchor position
+        });
+
+        // Loop through locations and add markers
+        locations.forEach(location => {
+            var marker = L.marker([location.lat, location.lng]).addTo(map);
+            // Adding popup with caption and image
+            marker.bindPopup(`
+                <b>${location.name}</b><br>
+                <img src="${location.image}" width="200px"><br>
+                <i>${location.caption}</i>  <!-- This is the caption -->
+            `, { autoPan: false });  // Prevent zoom when popup opens
+        });
+        
+        // // Add this to stop the map from zooming after clicking the marker
+        //     map.on('popupopen', function () {
+        //     map.setZoom(2); // Set zoom to a specific level after the popup is opened (you can customize the zoom level here)
+        // });
+    </script>
+
+</body>
+</html>
